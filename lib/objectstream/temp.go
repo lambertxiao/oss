@@ -12,6 +12,7 @@ type TempPutStream struct {
 	Uuid   string
 }
 
+// 在数据服务创建一个临时对象，数据服务返回代表这个临时对象的uuid
 func NewTempPutStream(server, object string, size int64) (*TempPutStream, error) {
 	request, e := http.NewRequest("POST", "http://"+server+"/temp/"+object, nil)
 	if e != nil {
@@ -30,6 +31,7 @@ func NewTempPutStream(server, object string, size int64) (*TempPutStream, error)
 	return &TempPutStream{server, string(uuid)}, nil
 }
 
+// 写入时，对数据服务的临时对象进行写入
 func (w *TempPutStream) Write(p []byte) (n int, err error) {
 	request, e := http.NewRequest("PATCH", "http://"+w.Server+"/temp/"+w.Uuid, strings.NewReader(string(p)))
 	if e != nil {
@@ -46,6 +48,7 @@ func (w *TempPutStream) Write(p []byte) (n int, err error) {
 	return len(p), nil
 }
 
+// 告诉数据服务，对象传递完毕，要转正
 func (w *TempPutStream) Commit(good bool) {
 	method := "DELETE"
 	if good {

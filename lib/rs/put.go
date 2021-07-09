@@ -19,6 +19,7 @@ func NewRSPutStream(dataServers []string, hash string, size int64) (*RSPutStream
 	writers := make([]io.Writer, ALL_SHARDS)
 	var e error
 	for i := range writers {
+		// 每个数据服务保存的数据 hash_index abc_0 abc_1
 		writers[i], e = objectstream.NewTempPutStream(dataServers[i],
 			fmt.Sprintf("%s.%d", hash, i), perShard)
 		if e != nil {

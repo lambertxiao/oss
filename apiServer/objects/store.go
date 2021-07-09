@@ -9,6 +9,7 @@ import (
 	"oss/lib/utils"
 )
 
+// 保存一个hash对象
 func storeObject(r io.Reader, hash string, size int64) (int, error) {
 	if locate.Exist(url.PathEscape(hash)) {
 		return http.StatusOK, nil
